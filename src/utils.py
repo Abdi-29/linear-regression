@@ -26,3 +26,14 @@ def normalize_data(data):
     min = np.min(data)
     max = np.max(data)
     return (data - min) / (max - min), min, max
+
+def denormalize(data, min_val, max_val):
+    return data * (max_val - min_val) + min_val
+
+def load_model(file):
+    data = np.load(file)
+    return data['theta0'], data['theta1'], data['min_mileage'], data['max_mileage'], data['min_price'], data['max_price']
+
+def save_model(theta0, theta1, min_mileage, max_mileage, min_price, max_price):
+    file = "data/params"
+    np.savez(file, theta0=theta0, theta1=theta1, min_mileage=min_mileage, max_mileage=max_mileage, min_price=min_price, max_price=max_price)
