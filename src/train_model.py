@@ -1,6 +1,6 @@
 import numpy as np
 from utils import read_data, normalize_data, check_data_integer, check_data_ranges, save_model
-from model import LinearRegression
+from model import LinearRegression, plot_result
 
 def main():
     path = 'data/data.csv'
@@ -27,6 +27,7 @@ def main():
     model.train(mileage, price)
     
     save_model(model.theta0, model.theta1, min_mileage, max_mileage, min_price, max_price)
+    plot_result(mileage, price, price)
 
 if __name__ == "__main__":
     main()
