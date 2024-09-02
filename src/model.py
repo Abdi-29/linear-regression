@@ -2,14 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.01, iterations=1000) -> None:
+    def __init__(self, learning_rate=0.01, iterations=1000, epsilon=1e-4) -> None:
         self.theta0 = 0.0
         self.theta1 = 0.0
         self.learning_rate = learning_rate
         self.iterations = iterations
+        self.epsilon = epsilon
 
     def predict(self, mileage):
-        return self.theta0 + self.theta1 * mileage
+        return self.theta0 + self.theta1 * np.array(mileage)
+    
     def cost_function(self, x, y):
         m = len(y)
         prediction = self.predict(x)
@@ -17,14 +19,31 @@ class LinearRegression:
 
     def train(self, x, y):
         m = len(y)
-        for _ in range(self.iterations):
+        previous_cost = float('inf')
+        cost = []
+        patience_counter = 0
+        patience_limit = 10000
+
+        for i in range(self.iterations):
             predictions = self.predict(x)
             d_theta0 = (1 / m) * np.sum(predictions - y)
             d_theta1 = (1 / m) * np.sum((predictions - y) * x)
             self.theta0 -= self.learning_rate * d_theta0
             self.theta1 -= self.learning_rate * d_theta1
 
+            current_cost = self.cost_function(x, y)
+            if abs(current_cost - previous_cost) < self.epsilon:
+                patience_counter += 1
+                if patience_counter >= patience_limit:
+                    print(f"Training done after iteration: {i + 1} with no improvement.")
+                    break
+
+            cost.append(current_cost)
+            previous_cost = current_cost
+
         print(f"final: {self.theta0}, theta1: {self.theta1}")
+
+        return cost
 
 """
     he Calculate the squared differences between the actual and predicted values:
@@ -54,16 +73,18 @@ class LinearRegression:
 def mean_squared_value(actual, predicted):
     return np.mean((actual - predicted) ** 2)
 
-def r_squared(actual, predicted):
-    ss_total = np.sum((actual - np.mean(actual)))
-    ss_result = np.sum((actual - predicted) ** 2)
-    return 1 - (ss_result / ss_total)
-
-def plot_result(mileage, price, predicted_price):
+def plot_result(mileage, price, predicted_price, title):
     plt.scatter(mileage, price, color='blue', label='Actual data')
     plt.plot(mileage, predicted_price, color='red', label='line')
     plt.xlabel('Mileage')
     plt.ylabel('Price')
-    plt.title('Mileage vs price')
+    plt.title(title)
     plt.legend()
+    plt.show()
+
+def plot_costs(costs):
+    plt.plot(costs)
+    plt.xlabel("Iteration")
+    plt.ylabel("Cost")
+    plt.title("Cost Function Over Iterations")
     plt.show()
