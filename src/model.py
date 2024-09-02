@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.01, iterations=1000, epsilon=1e-4) -> None:
+    def __init__(self, learning_rate=0.01, iterations=1000, epsilon=1e-6) -> None:
         self.theta0 = 0.0
         self.theta1 = 0.0
         self.learning_rate = learning_rate
@@ -10,7 +10,7 @@ class LinearRegression:
         self.epsilon = epsilon
 
     def predict(self, mileage):
-        return self.theta0 + self.theta1 * np.array(mileage)
+        return self.theta0 + self.theta1 * mileage
     
     def cost_function(self, x, y):
         m = len(y)
@@ -21,22 +21,19 @@ class LinearRegression:
         m = len(y)
         previous_cost = float('inf')
         cost = []
-        patience_counter = 0
-        patience_limit = 10000
 
         for i in range(self.iterations):
             predictions = self.predict(x)
             d_theta0 = (1 / m) * np.sum(predictions - y)
             d_theta1 = (1 / m) * np.sum((predictions - y) * x)
+
             self.theta0 -= self.learning_rate * d_theta0
             self.theta1 -= self.learning_rate * d_theta1
 
             current_cost = self.cost_function(x, y)
-            if abs(current_cost - previous_cost) < self.epsilon:
-                patience_counter += 1
-                if patience_counter >= patience_limit:
-                    print(f"Training done after iteration: {i + 1} with no improvement.")
-                    break
+            if abs(current_cost - previous_cost) < self.epsilon and (d_theta0 < self.epsilon and d_theta1 < self.epsilon):
+                print(f"Training done after iteration: {i + 1} with no improvement.")
+                break
 
             cost.append(current_cost)
             previous_cost = current_cost
