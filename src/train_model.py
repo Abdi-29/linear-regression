@@ -54,9 +54,8 @@ def main(args):
         plot_costs(costs)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Linear Regression Model with Bonus Features")
+    parser = argparse.ArgumentParser(description="Linear Regression Model")
     
-    # Define arguments
     parser.add_argument('-pr', action='store_true', help="Plot the regression line on a graph")
     parser.add_argument('-pcc', action='store_true', help="Plot the cost curve over training iterations")
     parser.add_argument('-lsr', action='store_true', help="Compare with Least Squares regression and plot")
