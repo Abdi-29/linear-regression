@@ -1,7 +1,8 @@
 import numpy as np
 from utils import read_data, normalize_data, check_data_integer, check_data_ranges, save_model, denormalize
-from model import LinearRegression, plot_result, plot_costs, mean_squared_value
+from model import LinearRegression, mean_squared_value
 from least_square_regression import LeastSquareRegression
+from visualize import plot_costs, plot_result
 import argparse
 
 def main(args):
@@ -44,8 +45,11 @@ def main(args):
     if args.lsr:
         lmq_model = LeastSquareRegression()
         lmq_model.fit(normalize_mileage, normalize_price)
-        te = lmq_model.predict(normalize_mileage)
-        plot_result(normalize_mileage, normalize_price, te, title="Least Squares Regression")
+        lsr_predicted_price = lmq_model.predict(normalize_mileage)
+        if args.use_raw_data:
+            lsr_predicted_price = denormalize(lsr_predicted_price, min_price, max_price)
+
+        plot_result(mileage, price, lsr_predicted_price, title="Least Squares Regression")
 
     if args.pr:
         plot_result(mileage, price, predicted_price, title="Gradient Descent Regression")
@@ -69,7 +73,7 @@ if __name__ == "__main__":
     parser.add_argument('-cp', action='store_true', help="Calculate and print the precision (MSE) of the model")
     parser.add_argument('--learningrate', '-l', default=0.1, type=check_learning_rate, 
                     help="Learning rate for gradient descent (between 0.0001 and 1.0)")
-    parser.add_argument('--iterations', '-i', default= 500, type=int)
+    parser.add_argument('--iterations', '-i', default= 1000, type=int)
 
     args = parser.parse_args()
     main(args)

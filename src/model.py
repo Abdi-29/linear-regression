@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 class LinearRegression:
     def __init__(self, learning_rate=0.01, iterations=1000, epsilon=1e-6):
@@ -69,19 +68,3 @@ class LinearRegression:
 """
 def mean_squared_value(actual, predicted):
     return np.mean((actual - predicted) ** 2)
-
-def plot_result(mileage, price, predicted_price, title):
-    plt.scatter(mileage, price, color='blue', label='Actual data')
-    plt.plot(mileage, predicted_price, color='red', label='line')
-    plt.xlabel('Mileage')
-    plt.ylabel('Price')
-    plt.title(title)
-    plt.legend()
-    plt.show()
-
-def plot_costs(costs):
-    plt.plot(costs)
-    plt.xlabel("Iteration")
-    plt.ylabel("Cost")
-    plt.title("Cost Function Over Iterations")
-    plt.show()
