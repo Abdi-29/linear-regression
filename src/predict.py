@@ -10,7 +10,16 @@ def main():
     model.theta0 = theta0
     model.theta1 = theta1
 
-    mileage_input = float(input("Enter the mileage: "))
+    while True:
+        try:
+            mileage_input = float(input("Enter the mileage: "))
+
+            if mileage_input < 0:
+                raise ValueError("Mileage cannot be negative.")
+            
+            break
+        except ValueError as e:
+            print(f"Invalid input: {e}. Please enter a valid number.")
 
     n_mileage = (mileage_input - min_mileage) / (max_mileage - min_mileage)
 

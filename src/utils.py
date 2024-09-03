@@ -31,8 +31,18 @@ def denormalize(data, min_val, max_val):
     return data * (max_val - min_val) + min_val
 
 def load_model(file):
-    data = np.load(file)
-    return data['theta0'], data['theta1'], data['min_mileage'], data['max_mileage'], data['min_price'], data['max_price']
+    try:
+        data = np.load(file)
+        return data['theta0'], data['theta1'], data['min_mileage'], data['max_mileage'], data['min_price'], data['max_price']
+    
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The file '{file}' does not exist.")
+    
+    except KeyError as e:
+        raise KeyError(f"Missing expected data in the file: {str(e)}")
+    
+    except Exception as e:
+        raise Exception(f"An error occurred while loading the file: {str(e)}")
 
 def save_model(theta0, theta1, min_mileage, max_mileage, min_price, max_price):
     file = "data/params"

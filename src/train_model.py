@@ -53,6 +53,12 @@ def main(args):
     if args.pcc:
         plot_costs(costs)
 
+def check_learning_rate(value):
+    value = float(value)
+    if value < 0.0001 or value > 1.0:
+        raise argparse.ArgumentTypeError(f"Learning rate must be between 0.0001 and 1.0, but got {value}")
+    return value
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Linear Regression Model")
     
@@ -61,7 +67,8 @@ if __name__ == "__main__":
     parser.add_argument('-lsr', action='store_true', help="Compare with Least Squares regression and plot")
     parser.add_argument('--use_raw_data', action='store_true', help="Use raw (non-normalized) data instead of normalized data")
     parser.add_argument('-cp', action='store_true', help="Calculate and print the precision (MSE) of the model")
-    parser.add_argument('--learningrate', '-l', default=0.1, type= float)
+    parser.add_argument('--learningrate', '-l', default=0.1, type=check_learning_rate, 
+                    help="Learning rate for gradient descent (between 0.0001 and 1.0)")
     parser.add_argument('--iterations', '-i', default= 500, type=int)
 
     args = parser.parse_args()

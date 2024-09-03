@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.01, iterations=1000, epsilon=1e-6) -> None:
+    def __init__(self, learning_rate=0.01, iterations=1000, epsilon=1e-6):
         self.theta0 = 0.0
         self.theta1 = 0.0
         self.learning_rate = learning_rate
